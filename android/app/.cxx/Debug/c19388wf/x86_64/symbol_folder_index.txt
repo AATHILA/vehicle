@@ -1,0 +1,1 @@
+C:\Users\athil\AndroidStudioProjects\vehicle\build\app\intermediates\cxx\Debug\c19388wf\obj\x86_64

@@ -1,0 +1,2 @@
+C:/Users/athil/AndroidStudioProjects/vehicle/android/app/.cxx/Debug/c19388wf/x86/CMakeFiles/edit_cache.dir
+C:/Users/athil/AndroidStudioProjects/vehicle/android/app/.cxx/Debug/c19388wf/x86/CMakeFiles/rebuild_cache.dir

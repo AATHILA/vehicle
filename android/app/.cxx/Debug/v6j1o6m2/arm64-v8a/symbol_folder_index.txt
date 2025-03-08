@@ -1,0 +1,1 @@
+C:\Users\athil\AndroidStudioProjects\vehicle\build\app\intermediates\cxx\Debug\v6j1o6m2\obj\arm64-v8a
