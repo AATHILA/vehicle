@@ -7,7 +7,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vehicle/constants/color_pallette.dart';
 import 'package:vehicle/vehiclelist.dart';
+import 'constants/custom_text.dart';
 import 'main.dart';
 import 'models/usermodel.dart';
 
@@ -36,41 +38,45 @@ class _AddvehicleState extends State<Addvehicle> {
   DateTime? _selectedYear;
   int? _selectedYearStr;
   String? base64String;
-  // Future<void> _selectDate(BuildContext context) async {
-  //   DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2030),
-  //   );
-  //
-  //   if (pickedDate != null) {
-  //     setState(() {
-  //       _selectedYear = pickedDate;
-  //     });
-  //   }
-  // }
-
+  
+  showMsg(String msg){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
 
   Future<void> selectYear(BuildContext context) async {
     DateTime currentDate = DateTime.now();
-    DateTime? pickedDate = await showDialog<DateTime>(
+
+    await showDialog<DateTime>(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: SizedBox(
-            height: 300,
-            child: YearPicker(
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2030),
-              selectedDate: _selectedYear ?? currentDate,
-              onChanged: (DateTime date) {
-                setState(() {
-                  _selectedYear=date;
-                  _selectedYearStr = date.year; // Convert year to String
-                });
-                Navigator.pop(context);
-              },
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.dark(
+              primary: ColorPallette.buttonColor, // Selected year background color
+              onPrimary: ColorPallette.accentColor, // Selected year text color
+              surface: ColorPallette.secondaryColor, // Dialog background
+              onSurface: ColorPallette.textColor, // Text color
+            ),
+          ),
+          child: Dialog(
+            backgroundColor: ColorPallette.secondaryColor, // Dialog background
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: SizedBox(
+              height: 300,
+              child: YearPicker(
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2030),
+                selectedDate: _selectedYear ?? currentDate,
+                onChanged: (DateTime date) {
+                  setState(() {
+                    _selectedYear = date;
+                    _selectedYearStr = date.year;
+                  });
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ),
         );
@@ -116,24 +122,8 @@ try{
       List<int> imageBytes = await _image!.readAsBytes();
       base64String = base64Encode(imageBytes);
 
-      //await uploadToFirebaseStorage(_image!);
     }
   }
-  // Future<void> uploadToFirebaseStorage(File image) async {
-  //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-  //   Reference storageRef =
-  //   FirebaseStorage.instance.ref().child('vehicles/$fileName.jpg');
-  //   UploadTask uploadTask = storageRef.putFile(image);
-  //   await uploadTask.whenComplete(() async {
-  //      String downloadURL = await storageRef.getDownloadURL();
-  // //
-  //     // Save download URL in Firestore
-  //     // await FirebaseFirestore.instance.collection('vehicles').add({
-  //     //   'image_url': downloadURL,
-  //     //   'timestamp': FieldValue.serverTimestamp(),
-  //     // });
-    //});
- // }
 
 
   @override
@@ -143,7 +133,7 @@ try{
         title: Text("Add Vehicle"),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        leading: Icon(Icons.arrow_back),
+        leading: Icon(Icons.arrow_back) ,
         centerTitle: true,
       ),
       body: Padding(
@@ -154,8 +144,10 @@ try{
               controller: nameController,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: ColorPallette.buttonColor,
                 hintText: "Please enter your name",
+                hintStyle: TextStyle(fontWeight: FontWeight.normal,
+                    color: ColorPallette.textColorinbutton),
                 border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(width * 0.03)),
@@ -164,54 +156,53 @@ try{
             SizedBox(
               height: height * 0.01,
             ),
-            DropdownButtonFormField<int>(
-              dropdownColor: Colors.grey[200],
-              focusColor: Colors.grey[200],
-              value: _selectedItem,
-              hint: Text('Mileage in Km/Litre'),
-              items: _filteredItems.map((int value) {
-                return DropdownMenuItem<int>(
-                  value: value,
-                  child: Text(value.toString()),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                  setState(() {
-                    _selectedItem = newValue;
-                  });
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
+
+
+        DropdownButtonFormField<int>(
+          dropdownColor: ColorPallette.buttonColor, // Matching theme
+          value: _selectedItem,
+          hint: Text('Mileage in Km/Litre', style: TextStyle(color: ColorPallette.textColorinbutton,
+              fontSize:width*0.04,fontWeight: FontWeight.normal),),
+          items: _filteredItems.map((int value) {
+            return DropdownMenuItem<int>(
+              value: value,
+              child: Text(value.toString(), style: TextStyle(color: ColorPallette.textColor)),
+            );
+          }).toList(),
+          onChanged: (newValue) {
+            setState(() {
+              _selectedItem = newValue;
+            });
+          },
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: ColorPallette.buttonColor, // Background color
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(width * 0.03),
+              borderSide: BorderSide.none, // No outline
             ),
-            SizedBox(
+          ),
+        ),
+
+        SizedBox(
               height: height * 0.01,
             ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(width*0.3),
-                color: Colors.grey,
 
-              ),
+            CustomButton(
 
-            ),
-            SizedBox(
-              height: height * 0.01,
-            ),
-            ElevatedButton(
-              onPressed: () => selectYear(context),
-              child: Text( _selectedYearStr== null
+              height: height*0.67,
+              title: _selectedYearStr == null
                   ? "Pick a Date"
-                  : "Year : ${_selectedYearStr!}",),
+                  : "${_selectedYearStr!}",
+
+              color: ColorPallette.textColorinbutton,
+
+              backgroundColor: ColorPallette.buttonColor,
+              borderRadius: 12.0,
+              fontSize: width*0.04,
+              onPressed: () => selectYear(context),
+              fontWeight: FontWeight.normal,
             ),
-            // ElevatedButton(
-            //   onPressed: () => _selectDate(context),
-            //   child: Text(
-            //     _selectedDate == null
-            //         ? "Pick a Date"
-            //         : "Year: ${_selectedDate!.year.toString()}",
-            //   ),
-            // ),
 
             SizedBox(
               height: height * 0.01,
@@ -226,15 +217,23 @@ try{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () => _pickImage(ImageSource.gallery),
-                      child: Text('Pick from Gallery'),
-                    ),
-                    SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: () => _pickImage(ImageSource.camera),
-                      child: Text('Capture Image'),
-                    ),
+    CustomButton(
+      height: height*0.67,
+    title: 'Pick from Gallery',
+    backgroundColor: ColorPallette.textColorinbutton,
+    borderRadius: 8.0,
+    fontSize: 16.0,
+        onPressed: () => _pickImage(ImageSource.gallery),
+    ),
+                SizedBox(width: width*0.03),
+    CustomButton(
+      height: height*0.67,
+    title: 'Capture Image',
+    backgroundColor: ColorPallette.textColorinbutton,
+    borderRadius: 8.0,
+    fontSize: 16.0,
+    onPressed: () => _pickImage(ImageSource.camera),
+    ),
                   ],
                 ),
               ],
@@ -244,15 +243,26 @@ try{
             ),
             FloatingActionButton.extended(
               icon: Icon(Icons.save),
-              backgroundColor: Colors.black,
+              backgroundColor: ColorPallette.textColorinbutton,
               foregroundColor: Colors.white,
-              onPressed: () => {
-                addVehicleFunction(),
-              Navigator.push(
+              onPressed: () {
+                addVehicleFunction();
+                if(nameController!="" && _selectedItem!=null && _selectedYearStr!=null && _image!=null){
+                  Navigator.push(
 
-              context,
-              MaterialPageRoute(builder: (context) => CarGridScreen()),
-              ),
+                    context,
+                    MaterialPageRoute(builder: (context) => CarGridScreen()),
+                  );
+                }
+                else{
+                  nameController.text==""?showMsg("Please enter name"):
+                  _selectedItem==null?showMsg("Please select mileage"):
+                      _selectedYearStr==null?showMsg("Please pick a year"):
+                          showMsg("Please select an image");
+                }
+
+
+
               }, label:  Text("Add Vehicle"),
 
 

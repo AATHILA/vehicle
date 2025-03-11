@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vehicle/addvehicle.dart';
+import 'package:vehicle/constants/color_pallette.dart';
 import 'package:vehicle/savevehicle.dart';
 import 'package:vehicle/vehiclelist.dart';
 
@@ -33,10 +34,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        scaffoldBackgroundColor: ColorPallette.secondaryColor,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      home: CarGridScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
