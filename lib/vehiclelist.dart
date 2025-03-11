@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vehicle/util_class.dart';
 import 'addvehicle.dart';
 import 'constants/color_pallette.dart';
 import 'constants/custom_text.dart';
@@ -61,7 +62,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
               crossAxisCount: 2,
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
-              childAspectRatio: 0.62,
+              childAspectRatio: 0.73,
             ),
             itemBuilder: (context, index) {
               var vehicle = data[index].data();
@@ -73,7 +74,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
 
               if (mileage >= 15 && (currentYear - year) <= 5) {
                 backgroundColor = Colors.green;
-                status = "Fuel efficient\nLow pollutant";
+                status = "Fuel efficient, Low pollutant";
               } else if (mileage < 15 && (currentYear - year) > 5) {
                 backgroundColor = Colors.amber;
                 status = "Moderately Pollutant";
@@ -118,7 +119,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Container(
                         width: width*1,
-                        child: Text(vehicle["name"],style: GoogleFonts.outfit(
+                        child: Text(CarUtil.capitalizeFirst(vehicle["name"]),style: GoogleFonts.outfit(
                           textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: ColorPallette.cardNameColor),
                         ),
                         textAlign: TextAlign.left
@@ -191,64 +192,68 @@ class _CarGridScreenState extends State<CarGridScreen> {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: onDelete,
-                          icon:  Icon(Icons.edit, color: Colors.grey[400],size: width*0.05,),
-                          tooltip: 'Edit',
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
+                    Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, // Ensures the Row only takes the necessary space
+                        children: [
+                          GestureDetector(
+                            onTap: onDelete,
+                            child: SizedBox(
+                              width: width * 0.06, // Adjust size as needed
+                              child: Icon(Icons.edit, color: Colors.grey[400], size: width * 0.05),
+                            ),
+                          ),
+                          SizedBox(width: 4), // Adjust or remove to control spacing
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
                                     title: Text("Confirm Deletion"),
-                                   content: Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      CustomButton(
-                                        height: height*0.67,
-                                        backgroundColor: ColorPallette.textColor,
-
-                                        title: 'Cancel',
-                                        fontSize: width*0.03,
-                                        onPressed:  () =>
-                                            Navigator.pop(context),
-                                        color: ColorPallette.buttonColor,
-                                      ),
-                                      CustomButton(
-                                        height: height*0.67,
+                                    content: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        CustomButton(
+                                          height: height * 0.67,
+                                          backgroundColor: ColorPallette.textColor,
+                                          title: 'Cancel',
+                                          fontSize: width * 0.03,
+                                          onPressed: () => Navigator.pop(context),
+                                          color: ColorPallette.buttonColor,
+                                        ),
+                                        CustomButton(
+                                          height: height * 0.67,
                                           title: 'Delete',
-                                      backgroundColor: ColorPallette.textColor,
-                                      fontSize: width*0.03,
-                                      color: ColorPallette.buttonColor,
-                                      onPressed: () {
-                                          FirebaseFirestore.instance.collection('vehicles').doc(data[index].id).delete();
-                                          Navigator.pop(context);
-
-                                      }),
-                                    ],
-                                   ),
+                                          backgroundColor: ColorPallette.textColor,
+                                          fontSize: width * 0.03,
+                                          color: ColorPallette.buttonColor,
+                                          onPressed: () {
+                                            FirebaseFirestore.instance
+                                                .collection('vehicles')
+                                                .doc(data[index].id)
+                                                .delete();
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
-                            );
-                          },
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                          icon:  Icon(Icons.delete, color: Colors.grey[400],size: width*0.05,),
-                          tooltip: 'Delete',
-                        ),
-                      ],
-                    ),
+                              );
+                            },
+                            child: SizedBox(
+                              width: width * 0.06,
+                              child: Icon(Icons.delete, color: Colors.grey[400], size: width * 0.05),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+
                   ],
-                ),
-                  ],
-                ),
+                ),],)
               );
             },
           );
