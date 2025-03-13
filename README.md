@@ -2,15 +2,4 @@
 
 A new Flutter project.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Exercise: Develop a Flutter app to display a list of vehicles. Any vehicle that gives 15km/litre or above and 5-year-old or less is considered to be fuel efficient and low pollutant. This vehicle will have a green color coding. 15km/litre or above but older than 5 years will be fuel efficient, but moderately pollutant. These vehicles will have amber color coding. Everything else will be red colored.
