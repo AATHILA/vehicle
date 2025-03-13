@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vehicle/constants/util_class.dart';
 import 'addvehicle.dart';
 import 'constants/color_pallette.dart';
-import 'constants/custom_text.dart';
+import 'constants/custom_button.dart';
 import 'main.dart';
 
 class CarGridScreen extends StatefulWidget {

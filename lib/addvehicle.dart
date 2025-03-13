@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:vehicle/constants/color_pallette.dart';
 import 'package:vehicle/models/usermodel.dart';
 import 'package:vehicle/vehiclelist.dart';
-import 'constants/custom_text.dart';
+import 'constants/custom_button.dart';
 import 'main.dart';
 
 class AddEditVehicle extends StatefulWidget {
