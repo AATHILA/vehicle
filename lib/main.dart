@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vehicle/addvehicle.dart';
 import 'package:vehicle/constants/color_pallette.dart';
-import 'package:vehicle/savevehicle.dart';
 import 'package:vehicle/vehiclelist.dart';
 
 import 'firebase_options.dart';

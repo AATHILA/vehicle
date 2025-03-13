@@ -41,10 +41,10 @@ class _MyHomePageState extends State<MyHomePage> {
         floatingActionButton:
     GestureDetector(
     onTap: () {
-    // Navigate to the second page
+
     Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Addvehicle()),
+    MaterialPageRoute(builder: (context) => AddEditVehicle()),
     );
     },
     child:

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
@@ -14,11 +13,16 @@ class CustomButton extends StatelessWidget {
   final double? borderRadius;
   final Color? backgroundColor;
   final double height;
+  final double? width;
+   Alignment? alignment;
 
-  const CustomButton({
+
+
+   CustomButton({
     super.key,
     required this.title,
      required this.height,
+    this.width,
     this.color,
     this.fontWeight,
     this.fontSize,
@@ -26,6 +30,8 @@ class CustomButton extends StatelessWidget {
     this.decoration,
     this.borderRadius,
     this.backgroundColor,
+ this.alignment
+
   });
 
   @override
@@ -34,6 +40,8 @@ class CustomButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         height: height*0.09,
+        width: width,
+        alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         decoration: decoration ??
             BoxDecoration(

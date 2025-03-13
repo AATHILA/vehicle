@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vehicle/util_class.dart';
+import 'package:vehicle/constants/util_class.dart';
 import 'addvehicle.dart';
 import 'constants/color_pallette.dart';
 import 'constants/custom_text.dart';
@@ -19,8 +19,13 @@ class _CarGridScreenState extends State<CarGridScreen> {
 
 
 
-  void onEdit() {
-    print('Edit icon clicked');
+  void onEdit(vehicleDocument) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddEditVehicle(vehicleData: vehicleDocument),
+      ),
+    );
   }
 
   void onDelete() {
@@ -34,7 +39,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3)).then((value) {
+    Future.delayed(Duration(seconds: 2)).then((value) {
       setState(() => isLoaded = true);
     },);
   }
@@ -66,18 +71,19 @@ class _CarGridScreenState extends State<CarGridScreen> {
             ),
             itemBuilder: (context, index) {
               var vehicle = data[index].data();
-              int mileage = vehicle["mileage"];
+              DocumentSnapshot documentSnapshot =  data[index];
+              double mileage = vehicle["mileage"];
               int year = vehicle["year"];
               int currentYear = DateTime.now().year;
               Color backgroundColor = Colors.red;
               String status = "";
 
               if (mileage >= 15 && (currentYear - year) <= 5) {
-                backgroundColor = Colors.green;
-                status = "Fuel efficient, Low pollutant";
-              } else if (mileage < 15 && (currentYear - year) > 5) {
+                 backgroundColor = Colors.green;
+                status = "Fuel Efficient, Low pollutant";
+              } else if (mileage <= 15 && (currentYear - year) > 5) {
                 backgroundColor = Colors.amber;
-                status = "Moderately Pollutant";
+                status = "Fuel Efficient, Moderately Pollutant";
               } else {
                 backgroundColor = Colors.red;
               }
@@ -120,7 +126,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
                       child: Container(
                         width: width*1,
                         child: Text(CarUtil.capitalizeFirst(vehicle["name"]),style: GoogleFonts.outfit(
-                          textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: ColorPallette.cardNameColor),
+                          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: ColorPallette.cardNameColor),
                         ),
                         textAlign: TextAlign.left
                         ),
@@ -137,7 +143,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text("Mileage",style: GoogleFonts.outfit(
-                                  textStyle: TextStyle(fontSize: 8, fontWeight: FontWeight.bold,color: ColorPallette.textColorinbutton),
+                                  textStyle: TextStyle(fontSize: 8, fontWeight: FontWeight.bold,color: ColorPallette.textColorinfield),
                                 ),
                                 ),
                                 Text("${vehicle["mileage"]} Km/litre",
@@ -151,7 +157,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text("Year",style: GoogleFonts.outfit(
-                                  textStyle: TextStyle(fontSize: 8, fontWeight: FontWeight.bold,color: ColorPallette.textColorinbutton),
+                                  textStyle: TextStyle(fontSize: 8, fontWeight: FontWeight.bold,color: ColorPallette.textColorinfield),
                                 ),),
                                 Text("${vehicle["year"]}",style: GoogleFonts.outfit(
                                   textStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
@@ -174,7 +180,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(status,style:GoogleFonts.outfit(
-                                textStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold,
+                                textStyle: TextStyle(fontSize: 8, fontWeight: FontWeight.bold,
                                     color: ColorPallette.textColor),
                             )),
 
@@ -195,23 +201,23 @@ class _CarGridScreenState extends State<CarGridScreen> {
                     Padding(
                       padding: const EdgeInsets.only(right: 2),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min, // Ensures the Row only takes the necessary space
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           GestureDetector(
-                            onTap: onDelete,
+                            onTap:() {onEdit(documentSnapshot);},
                             child: SizedBox(
-                              width: width * 0.06, // Adjust size as needed
+                              width: width * 0.06,
                               child: Icon(Icons.edit, color: Colors.grey[400], size: width * 0.05),
                             ),
                           ),
-                          SizedBox(width: 4), // Adjust or remove to control spacing
+                          SizedBox(width: 4),
                           GestureDetector(
                             onTap: () {
                               showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text("Confirm Deletion"),
+                                    title: Text("Confirm Deletion", style: GoogleFonts.poppins(fontWeight: FontWeight.w400)),
                                     content: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
@@ -245,7 +251,8 @@ class _CarGridScreenState extends State<CarGridScreen> {
                             },
                             child: SizedBox(
                               width: width * 0.06,
-                              child: Icon(Icons.delete, color: Colors.grey[400], size: width * 0.05),
+                              child: Icon(Icons.delete, color: Colors.grey[400],
+                                  size: width * 0.05),
                             ),
                           ),
                         ],
@@ -292,7 +299,7 @@ class _CarGridScreenState extends State<CarGridScreen> {
         body: isLoaded ? actualScreen(context) :loadingScreen(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Addvehicle())),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AddEditVehicle())),
           child: const Icon(Icons.add, color: Colors.white),
         ),
       ),

@@ -6,7 +6,7 @@ class ColorPallette{
   static const accentColor=Color(0xff1c5657);
   static const textColor=Color(0xff1F2937);
   static const buttonColor=Color(0xffEEEEEE);
-  static const textColorinbutton=Color(0xff757575);
+  static const textColorinfield=Color(0xff757575);
   static const cardNameColor=Color(0xFF070101);
 
 }

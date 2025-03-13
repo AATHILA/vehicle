@@ -1,6 +1,6 @@
 class UserModel {
   String name;
-  int mileage; // Dropdown options like "10 kmpl", "15 kmpl"
+  double mileage; // Dropdown options like "10 kmpl", "15 kmpl"
   int year;
   String imageData; // Stores selected image path
 
