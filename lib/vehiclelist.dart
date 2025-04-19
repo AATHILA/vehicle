@@ -217,7 +217,8 @@ class _CarGridScreenState extends State<CarGridScreen> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text("Confirm Deletion", style: GoogleFonts.poppins(fontWeight: FontWeight.w400)),
+                                    title: Text("Confirm Deletion",
+                                        style: GoogleFonts.poppins(fontWeight: FontWeight.w400)),
                                     content: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
